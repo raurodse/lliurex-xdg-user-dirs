@@ -1,3 +1,2 @@
-autostart/01-lliurex-xdg-mozilla-profile.desktop /etc/xdg/autostart/
-install/*	/
+lliurex-xdg-user-dirs.install/*		/
 
