@@ -1,0 +1,178 @@
+#!/bin/bash
+log(){
+	echo -n "$1:" >>/tmp/log 
+	shift
+	echo "$@" >>/tmp/log
+}
+LNG="$(set | grep GDM_LANG |sed -e "s#GDM_LANG=\(.*\)#\1#g;s#\(.*\)\.\(.*\)#\1#")"
+#log LNG $LNG
+TEXTDOMAIN="xdg-user-dirs"
+export TEXTDOMAIN
+
+USER_FILES="$HOME/UserFiles"
+USER_FILES_TOKEN_DIR="$HOME/.config/lliurex-tokens/"
+ETC_USER_FILES="/etc/skel/UserFiles"
+
+netUserFiles()
+{
+	GRP_USER="$(id -ng $USER_NAME)"
+	NET_HOME="/net/home/$GRP_USER/$USERNAME"
+	[ -w "$NET_HOME" ] || return 0
+	[ -d "$NET_HOME/UserFiles" ] || mkdir $NET_HOME/UserFiles
+	[ -d "$NET_HOME/Desktop" ] || mkdir $NET_HOME/Desktop
+	if [ -d "$HOME/UserFiles" -a ! -L "$HOME/UserFiles" ]; then 
+		rsync -rltD --backup --suffix=".$(date +%F_%R)" $HOME/UserFiles $NET_HOME/
+		rm -rf $HOME/UserFiles
+	fi
+	if [ -d "$HOME/Desktop" -a ! -L "$HOME/Desktop" ]; then
+		rsync -rltD --backup --suffix=".$(date +%F_%R)" $HOME/Desktop $NET_HOME/
+		rm -rf $HOME/Desktop 
+	fi
+	[ -L "$USER_FILES" ] || ln -s $NET_HOME/UserFiles	$HOME/UserFiles
+	[ -L "$HOME/Desktop" ] || ln -s $NET_HOME/Desktop	$HOME/Desktop
+}
+
+create_user_dirs()
+{
+	[ -d $HOME/.config ] || mkdir -p $HOME/.config
+	cat <<EOF > $HOME/.config/user-dirs.dirs
+XDG_DESKTOP_DIR="$HOME/Desktop"
+XDG_DOWNLOAD_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Downloads")"
+XDG_TEMPLATES_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Templates")"
+XDG_PUBLICSHARE_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Public")"
+XDG_DOCUMENTS_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Documents")"
+XDG_MUSIC_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Music")"
+XDG_PICTURES_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Pictures")"
+XDG_PHOTOS_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Photos")"
+XDG_VIDEOS_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Videos")"
+XDG_SHARE_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Share")"
+XDG_GROUPS_DIR="$HOME/$(LANGUAGE="$LNG" gettext "Groups")"
+EOF
+
+}
+
+remove_old_links()
+{
+	ARRAY_LINKS=$1
+	for i in $ARRAY_LINKS; do
+		#log 'i' $i
+		[ -h "$i" ] && rm -f "$i"
+	done
+}
+
+create_link() {
+	if [ -d "$USER_FILES/$1" ]; then
+		log "creating link" "$UserFiles/$1" 
+		ln -s "$USER_FILES/$1" "$(LANGUAGE="$LNG" gettext "$1")"
+		modify_bookmark "$1" "$2"
+	fi
+}
+
+# Name :check_and_make_dir
+# Function : This function check directory exist by other way create directory
+# Arguments : directory_path
+check_and_make_dir()
+{
+	NAMDIR="$1"
+	[ -d $1 ] || mkdir $1
+}
+
+create_nonuserfiles_link() {
+	local NAMDIR
+	check_and_make_dir $1
+	NAMDIR=$(basename $1)
+	TRNAMDIR=$(LANGUAGE="$LNG" gettext "$NAMDIR")
+	if [ ! -e "$TRNAMDIR" ]; then 
+		#log "creating link" "$UserFiles/$1" 
+		ln -s "$NAMDIR" "$TRNAMDIR"
+		modify_bookmark "$NAMDIR" "$2"
+	fi
+}
+
+set_lang(){
+	echo $LNG > $HOME/.config/user-dirs.locale
+}
+
+escape(){
+	echo -n "$1" | perl -pe's/([^-_.~A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg'
+}
+
+modify_bookmark(){
+	LOCALIZED="file://$HOME/$(escape "$(LANGUAGE="$LNG" gettext "$1")")"
+	#log LOCALIZED "$LOCALIZED"
+	OLD="file://$(escape "$2"|sed 's#%2F#/#g')"
+	sed -i -e "\#^$OLD#d" "$HOME/.gtk-bookmarks"
+	echo $LOCALIZED >> "$HOME/.gtk-bookmarks"
+	#log OLD "$OLD"
+	cat "$HOME"/.gtk-bookmarks |sort -u >"$HOME"/.gtk-bookmarks.bak
+	mv -f "$HOME"/.gtk-bookmarks.bak  "$HOME"/.gtk-bookmarks
+}
+
+create_trash(){
+	ALTERN=$(readlink /etc/alternatives/x-session-manager)
+	if [ "$GDMSESSION" = "LXDE" -o "$DESKTOP_SESSION" = "LXDE" -o "$ALTERN" = "/usr/bin/startlxde" ]; then
+		if [ ! -d "$HOME/Desktop" ]; then
+			mkdir "$HOME/Desktop"
+		fi
+		if [ ! -e "$HOME/Desktop/pcmanfm-trash.desktop" ]; then
+			cp /usr/share/pcmanfm/pcmanfm-trash.desktop "$HOME/Desktop/"
+		fi
+	fi
+	if  [ "$GDMSESSION" = "gnome" -o "$DESKTOP_SESSION" = "gnome" ]; then
+			rm -f "$HOME/Desktop/pcmanfm-trash.desktop"
+	fi
+}
+
+create_userfiles_directories()
+{
+	# Check all /etc/skel/UserFiles subdirectories
+	# and create on $HOME/UserFiles if needed.
+	[ -d "$USER_FILES_TOKEN_DIR" ] || mkdir -p "$USER_FILES_TOKEN_DIR"
+	for d in $(ls -1 "$ETC_USER_FILES") ; do
+		if [ ! -e "$USER_FILES_TOKEN_DIR/$d" ] ; then
+			mkdir -p "$USER_FILES/$d"
+			touch "$USER_FILES_TOKEN_DIR/$d"
+			echo "mkdir -p "$USER_FILES/$d"">>"$USER_FILES_TOKEN_DIR/$d"
+		fi
+	done
+	
+}
+
+
+# ################ Main ###################
+
+create_userfiles_directories
+
+[ -f "$HOME/.config/user-dirs.dirs" ] || create_user_dirs
+
+. $HOME/.config/user-dirs.dirs
+
+LLX_XDG_LINKS="$XDG_TEMPLATES_DIR $XDG_PUBLICSHARE_DIR $XDG_DOCUMENTS_DIR $XDG_MUSIC_DIR $XDG_PICTURES_DIR $XDG_PHOTOS_DIR $XDG_VIDEOS_DIR $XDG_SHARE_DIR $XDG_GROUPS_DIR"
+
+#Create net UserFiles for users with local home but they are net users
+netUserFiles
+#log "LLX_XDG_LINKS" $LLX_XDG_LINKS
+remove_old_links "${LLX_XDG_LINKS}"
+
+#create_link Desktop $XDG_DESKTOP_DIR
+create_link Templates $XDG_TEMPLATES_DIR
+create_link Public $XDG_PUBLICSHARE_DIR
+create_link Documents $XDG_DOCUMENTS_DIR
+create_link Music $XDG_MUSIC_DIR
+create_link Pictures $XDG_PICTURES_DIR
+create_link Photos $XDG_PHOTOS_DIR
+create_link Videos $XDG_VIDEOS_DIR
+create_link Share $XDG_SHARE_DIR
+create_link Groups $XDG_GROUPS_DIR
+
+LLX_XDG_LINKS_NONUSERFILES="$XDG_DOWNLOAD_DIR"
+remove_old_links "${LLX_XDG_LINKS_NONUSERFILES}"
+
+create_nonuserfiles_link Downloads "$XDG_DOWNLOAD_DIR"
+
+create_user_dirs
+create_trash
+
+set_lang
+
+exit 0

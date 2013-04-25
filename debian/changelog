@@ -1,0 +1,169 @@
+lliurex-xdg-user-dirs (0.27) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Francisco Antonino Daviu <antonino_fra@gva.es>  Fri, 27 Jan 2012 11:58:41 +0100
+
+lliurex-xdg-user-dirs (0.26) unstable; urgency=low
+
+  [ Francisco Antonino Daviu ]
+  * Launched for Nemo 
+
+ -- Francisco Antonino Daviu <antonino_fra@gva.es>  Fri, 27 Jan 2012 11:57:29 +0100
+
+lliurex-xdg-user-dirs (0.25) unstable; urgency=low
+
+  * Added /etc/skel/UserFiles/**NEWDIRECTORIES**
+    comprobation.
+  * Added depends with lliurex-base-files for the
+    new directories on /etc/skel/UserFiles 
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Thu, 09 Jun 2011 13:46:43 +0200
+
+lliurex-xdg-user-dirs (0.24) unstable; urgency=low
+
+  * Solved bug with permission on UserFiles and Desktop directory. (Wrong mask for ACL)
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Thu, 04 Nov 2010 10:52:16 +0100
+
+lliurex-xdg-user-dirs (0.23) unstable; urgency=low
+
+  * Fixed downloads directory name
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Thu, 23 Sep 2010 14:40:55 +0200
+
+lliurex-xdg-user-dirs (0.22) unstable; urgency=low
+
+  * Fix bookmarks duplication
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Thu, 23 Sep 2010 13:08:29 +0200
+
+lliurex-xdg-user-dirs (0.21) unstable; urgency=low
+
+  * BUG:No create Desktop on net home [SOLVED] 
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Tue, 13 Jul 2010 09:04:26 +0200
+
+lliurex-xdg-user-dirs (0.20) unstable; urgency=low
+
+  * Aditional check for $HOME/UserFiles and $HOME/Desktop
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Mon, 12 Jul 2010 08:39:30 +0200
+
+lliurex-xdg-user-dirs (0.19) unstable; urgency=low
+
+  * Add debug feature
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Fri, 09 Jul 2010 11:19:14 +0200
+
+lliurex-xdg-user-dirs (0.18) unstable; urgency=low
+
+  * Rsync changed path
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Fri, 09 Jul 2010 08:55:37 +0200
+
+lliurex-xdg-user-dirs (0.17) unstable; urgency=low
+
+  * Solved bug with create link for desktop
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Thu, 08 Jul 2010 11:43:30 +0200
+
+lliurex-xdg-user-dirs (0.16) unstable; urgency=low
+
+  * Copy desktop files to /net/home/USER/desktop
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Tue, 15 Jun 2010 08:42:12 +0200
+
+lliurex-xdg-user-dirs (0.15) unstable; urgency=low
+
+  * Rename folder download by downloads
+
+ -- Alfons Lloret Sananton <lliurex_devel5@edu.gva.es>  Tue, 08 Jun 2010 10:24:29 +0200
+
+lliurex-xdg-user-dirs (0.14) unstable; urgency=low
+
+  * Add support for created profile firefox in home user
+
+ -- Alfons Lloret Sananton <lliurex_devel5@edu.gva.es>  Tue, 08 Jun 2010 08:16:10 +0200
+
+lliurex-xdg-user-dirs (0.13) unstable; urgency=low
+
+  * Add support for net users with local home
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Mon, 29 Mar 2010 14:18:14 +0200
+
+lliurex-xdg-user-dirs (0.12) unstable; urgency=low
+
+  * First version for Leia 
+
+ -- Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>  Mon, 29 Mar 2010 14:07:35 +0200
+
+lliurex-xdg-user-dirs (0.11) unstable; urgency=low
+
+  * Fixed cpkg complication
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Thu, 03 Dec 2009 13:30:34 +0100
+
+lliurex-xdg-user-dirs (0.10) unstable; urgency=low
+
+  * First version for Kripton 
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Wed, 02 Dec 2009 12:52:10 +0100
+
+lliurex-xdg-user-dirs (0.8) unstable; urgency=low
+
+  * debian/control
+    - Maintainer and Uploaders fixed
+  * Invocation to lliurex-userguide deleted
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Mon, 11 May 2009 12:56:33 +0200
+
+lliurex-xdg-user-dirs (0.7) unstable; urgency=low
+
+  * Ignore errors when removing pcman-trash.desktop
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Mon, 11 May 2009 12:55:12 +0200
+
+lliurex-xdg-user-dirs (0.6) unstable; urgency=low
+
+  * Do not add pcman-trash.desktop file in gnome environment
+  * Updated package to debian policy 3.8.0  
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Mon, 11 May 2009 12:50:53 +0200
+
+lliurex-xdg-user-dirs (0.5) unstable; urgency=low
+
+  * Repackaged for indy
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Wed, 04 Feb 2009 13:41:03 +0100
+
+lliurex-xdg-user-dirs (0.5~llx0809+lliurex1) unstable; urgency=low
+
+  * Enhance lxde session detection
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Wed, 04 Feb 2009 13:38:42 +0100
+
+lliurex-xdg-user-dirs (0.4~llx0809+lliurex1) unstable; urgency=low
+
+  * Added trash support for lxde
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Mon, 02 Feb 2009 11:48:03 +0100
+
+lliurex-xdg-user-dirs (0.3) unstable; urgency=low
+
+  * Removed ~. The first Javi aportation!!!!!
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Thu, 16 Oct 2008 09:31:27 +0200
+
+lliurex-xdg-user-dirs (0.2) unstable; urgency=low
+
+  * Added xdg-user-dirs-jumble data depends
+  * Added /net/share and /net/groups control 
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Tue, 14 Oct 2008 17:48:20 +0200
+
+lliurex-xdg-user-dirs (0.1) unstable; urgency=low
+
+  * Initial Release. 
+
+ -- Miguel Gea Milvaques <gea_mig@gva.es>  Fri, 03 Oct 2008 10:30:21 +0200

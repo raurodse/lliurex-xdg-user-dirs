@@ -1,0 +1,15 @@
+#!/bin/sh
+# preinst script for lliurex-xdg-user-dirs
+
+set -e
+if [ install = "$1" ]; then
+	dpkg-divert --package lliurex-xdg-user-dirs --add  --rename \
+		--divert /usr/bin/xdg-user-dirs-update.real \
+			/usr/bin/xdg-user-dirs-update
+fi
+
+#DEBHELPER#
+
+exit 0
+
+
